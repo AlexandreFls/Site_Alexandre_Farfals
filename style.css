@@ -1,0 +1,148 @@
+@import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@600;700;800&display=swap');
+
+body {
+    margin: 0;
+    overflow: hidden;
+    background-color: #6CB4EE;
+    font-family: 'Fredoka', sans-serif;
+    user-select: none;
+    touch-action: none; 
+}
+
+canvas { display: block; width: 100vw; height: 100vh; }
+
+/* --- EFFETS VISUELS --- */
+#speed-lines {
+    position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none;
+    background: radial-gradient(circle, transparent 40%, rgba(255, 255, 255, 0.4) 100%);
+    opacity: 0; transition: opacity 0.3s; z-index: 5;
+}
+#floating-texts-container {
+    position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 10;
+}
+
+/* --- ANIMATION DÉCOMPTE NÉON --- */
+#countdown-container {
+    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+    display: flex; align-items: center; justify-content: center; z-index: 80; pointer-events: none;
+}
+#countdown-text {
+    font-size: 180px; font-weight: 800; color: #fff; text-transform: uppercase;
+    text-shadow: 0 0 10px #fff, 0 0 30px #00BFFF, 0 0 60px #00BFFF, 0 0 100px #00BFFF;
+    animation: neonPulse 1s ease-in-out infinite;
+}
+.neon-go {
+    font-size: 250px !important; color: #0f0 !important;
+    text-shadow: 0 0 20px #fff, 0 0 50px #0f0, 0 0 100px #0f0, 0 0 150px #00aa00 !important;
+    animation: explodeGo 1.5s cubic-bezier(0.1, 0.8, 0.3, 1) forwards !important;
+}
+@keyframes neonPulse { 0% { transform: scale(0.6); opacity: 0; } 40% { transform: scale(1.1); opacity: 1; } 100% { transform: scale(1); opacity: 0; } }
+@keyframes explodeGo { 0% { transform: scale(0.5); opacity: 1; } 30% { transform: scale(1.3); opacity: 1; } 100% { transform: scale(3); opacity: 0; } }
+
+/* --- ÉCRANS GLOBAUX --- */
+#start-screen, #game-over-screen {
+    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+    background: radial-gradient(circle, rgba(0,30,54,0.7) 0%, rgba(0,15,30,0.95) 100%);
+    display: flex; flex-direction: column; justify-content: center; align-items: center;
+    z-index: 30; color: white; pointer-events: auto;
+}
+
+/* --- TYPOGRAPHIE ACCUEIL --- */
+.game-title {
+    font-size: 110px; margin: 0; color: #00bfff; text-shadow: 0px 8px 0px #005577, 0px 0px 30px rgba(0, 191, 255, 0.8);
+    animation: floatTitle 3s ease-in-out infinite; text-align: center;
+}
+@keyframes floatTitle { 0%, 100% { transform: translateY(0px) rotate(-1deg); } 50% { transform: translateY(-15px) rotate(1deg); } }
+.game-slogan { font-size: 24px; letter-spacing: 2px; margin-top: 10px; margin-bottom: 40px; text-shadow: 2px 2px 4px rgba(0,0,0,0.8); text-align: center; }
+.credits { position: absolute; bottom: 20px; text-align: center; font-size: 16px; color: rgba(255, 255, 255, 0.6); line-height: 1.5; text-shadow: 1px 1px 2px black; }
+.high-score-badge { position: absolute; top: 30px; background: linear-gradient(45deg, #FFD700, #FFA500); color: black; font-size: 24px; padding: 10px 20px; border-radius: 30px; box-shadow: 0 4px 15px rgba(255,215,0,0.4); font-weight: bold; border: 2px solid white; }
+
+#game-over-screen h1 { font-size: 80px; margin-bottom: 10px; color: #FF4500; text-shadow: 4px 4px 0px #8b0000; text-align: center;}
+#final-score { font-size: 40px; margin-bottom: 40px; color: #FFD700; text-align: center;}
+
+/* --- BOUTONS --- */
+.main-menu-btns { display: flex; flex-direction: column; gap: 20px; align-items: center; }
+#btn-play {
+    padding: 20px 80px; font-size: 45px; font-weight: bold; font-family: 'Fredoka', sans-serif;
+    background: linear-gradient(to bottom, #FF6347, #FF4500); color: white; border-radius: 50px; border: none; cursor: pointer;
+    box-shadow: 0px 8px 0px #8b0000, 0px 15px 30px rgba(0,0,0,0.5); animation: pulsePlay 2s infinite;
+}
+@keyframes pulsePlay { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
+#btn-play:active { transform: translateY(8px) scale(1) !important; box-shadow: 0px 0px 0px #8b0000; }
+
+#btn-rules { background: #0088cc; color: white; border: none; font-family: 'Fredoka', sans-serif; padding: 15px 40px; border-radius: 50px; font-size: 22px; cursor: pointer; box-shadow: 0 6px 0 #004466; transition: transform 0.1s; }
+#btn-rules:active { transform: translateY(6px); box-shadow: 0 0px 0 #004466;}
+
+.menu-btn { padding: 15px 40px; font-size: 26px; font-family: 'Fredoka', sans-serif; color: #333; background-color: #FFD700; border: none; border-radius: 12px; cursor: pointer; box-shadow: 0px 6px 0px #b39700; transition: transform 0.1s; min-width: 250px; margin-bottom: 15px;}
+.menu-btn:active { transform: translateY(6px); box-shadow: 0px 0px 0px #b39700; }
+
+.revive-btn { background-color: #4CAF50; color: white; box-shadow: 0px 6px 0px #2E7D32; display: flex !important; align-items: center; justify-content: center; gap: 8px; white-space: nowrap !important; }
+.revive-btn:active { box-shadow: 0px 0px 0px #2E7D32; }
+.home-btn { background-color: #0088cc; color: white; box-shadow: 0px 6px 0px #004466; font-size: 20px; margin-top: 10px;}
+.home-btn:active { box-shadow: 0px 0px 0px #004466; }
+
+/* --- INTERFACE EN JEU (UI) --- */
+#ui-container { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 10; }
+#pause-btn { position: absolute; top: 20px; left: 20px; padding: 10px 20px; font-size: 18px; font-family: 'Fredoka', sans-serif; color: #333; background-color: #FFD700; border: none; border-radius: 8px; cursor: pointer; pointer-events: auto; box-shadow: 0px 4px 0px #b39700; }
+#dive-container { position: absolute; top: 80px; left: 20px; font-size: 24px; color: aqua; background-color: rgba(0, 0, 0, 0.6); padding: 8px 15px; border-radius: 8px; border: 2px solid aqua; text-shadow: 1px 1px 2px black; font-weight: bold; }
+#score-container { position: absolute; top: 20px; left: 50%; transform: translateX(-50%); text-align: center; }
+#score-display { font-size: 55px; font-weight: bold; color: white; text-shadow: 0px 4px 0px rgba(0, 0, 0, 0.3); }
+#coin-container { position: absolute; top: 20px; right: 20px; font-size: 32px; color: #FFD700; text-shadow: 2px 2px 0px #aa8800, 0px 4px 6px rgba(0,0,0,0.5); background-color: rgba(0, 0, 0, 0.4); padding: 5px 15px; border-radius: 12px; border: 2px solid #FFD700; font-weight: bold; }
+#combo-container { position: absolute; top: 90px; right: 20px; text-align: right; }
+#combo-text { font-size: 45px; font-weight: bold; font-style: italic; transition: transform 0.1s; text-shadow: 3px 3px 0px rgba(0,0,0,0.8); }
+#combo-bar-bg { width: 150px; height: 12px; background: rgba(0,0,0,0.6); border: 2px solid white; border-radius: 6px; float: right; margin-top: 5px; overflow: hidden; box-shadow: 0 4px 6px rgba(0,0,0,0.4); }
+#combo-bar-fill { width: 100%; height: 100%; background: #FFD700; transition: width 0.1s linear; }
+#boost-container { position: absolute; bottom: 40px; right: 40px; width: 30px; height: 250px; border: 3px solid white; border-radius: 15px; background-color: rgba(0, 0, 0, 0.5); overflow: hidden; box-shadow: 0px 6px 10px rgba(0,0,0,0.3); }
+#boost-bar { position: absolute; bottom: 0; width: 100%; height: 100%; background: linear-gradient(to top, #FF8C00, #FFD700); transition: height 0.1s linear; }
+#boost-icon { position: absolute; top: -40px; left: 50%; transform: translateX(-50%); font-size: 24px; text-shadow: 0 0 10px yellow; }
+
+/* --- MODAL DES RÈGLES --- */
+#rules-modal { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 100; display: flex; align-items: center; justify-content: center; transition: opacity 0.3s; pointer-events: auto; }
+.modal-hidden { opacity: 0; pointer-events: none !important; }
+.modal-content { background: #fff; color: #333; padding: 30px; border-radius: 25px; width: 90%; max-width: 450px; text-align: center; font-family: 'Fredoka', sans-serif;}
+.rules-grid { text-align: left; margin: 25px 0; display: flex; flex-direction: column; gap: 15px;}
+.rule-item { display: flex; align-items: center; gap: 15px; font-size: 18px; font-weight: 600;}
+.rule-item span { font-size: 24px; background: #eee; padding: 8px; border-radius: 8px; min-width: 50px; text-align: center; }
+#btn-close-rules { background: #4CAF50; color: white; padding: 15px 40px; border: none; border-radius: 12px; font-size: 20px; font-weight: bold; font-family: 'Fredoka', sans-serif; cursor: pointer; box-shadow: 0 6px 0 #2E7D32;}
+
+/* --- ANIMATIONS JELLY / PARTICULES --- */
+.shake-hard { animation: shake 0.3s infinite; }
+@keyframes shake { 0% { transform: translate(2px, 1px) rotate(0deg); } 50% { transform: translate(-3px, 0px) rotate(1deg); } 100% { transform: translate(1px, -1px) rotate(0deg); } }
+.floating-score { position: absolute; top: 50%; left: 50%; font-size: 35px; font-weight: bold; pointer-events: none; text-shadow: 2px 2px 0px rgba(0,0,0,0.8); animation: floatUp 0.8s forwards; z-index: 100; }
+@keyframes floatUp { 0% { transform: translate(-50%, -10px) scale(0.5); opacity: 1; } 100% { transform: translate(-50%, -90px) scale(1); opacity: 0; } }
+.score-particle { position: absolute; top: 50%; left: 50%; width: 12px; height: 12px; border-radius: 50%; pointer-events: none; animation: explode 1s forwards; z-index: -1; }
+@keyframes explode { 0% { transform: translate(-50%, -50%) scale(1); opacity: 1; } 100% { transform: translate(calc(-50% + var(--tx)), calc(-50% + var(--ty))) scale(0); opacity: 0; } }
+
+/* --- CONTRÔLES TACTILES (MOBILE) --- */
+.mobile-btn { position: absolute; bottom: 40px; width: 70px; height: 70px; background: rgba(255,255,255,0.2); border: 2px solid white; border-radius: 50%; display: none; align-items: center; justify-content: center; font-size: 32px; pointer-events: auto; }
+#mobile-ctrl-left { left: 20px; }
+#mobile-ctrl-right { left: 110px; }
+#mobile-actions { position: absolute; bottom: 30px; right: 80px; display: none; flex-direction: column; gap: 15px; pointer-events: auto; }
+.mobile-action-btn { background: rgba(0,0,0,0.6); color: white; border: 2px solid white; padding: 15px 25px; border-radius: 12px; font-size: 16px; font-weight: bold; text-align: center; font-family: 'Fredoka', sans-serif; }
+.mobile-action-btn:active, .mobile-btn:active { background: rgba(255,255,255,0.5); }
+
+/* --- RESPONSIVE DESIGN (TÉLÉPHONES) --- */
+@media (max-width: 768px) {
+    #countdown-text { font-size: 120px; }
+    .neon-go { font-size: 160px !important; }
+    .game-title { font-size: 70px; }
+    .game-slogan { font-size: 18px; margin-bottom: 30px; }
+    #btn-play { font-size: 35px; padding: 15px 60px; }
+    .controls-info { display: none; }
+    .high-score-badge { font-size: 18px; top: 20px; }
+    .credits { font-size: 14px; bottom: 10px; width: 90%; }
+    #score-display { font-size: 40px; }
+    #coin-container { font-size: 24px; top: 15px; right: 15px; }
+    #combo-container { top: 70px; right: 15px; }
+    #combo-text { font-size: 35px; }
+    #combo-bar-bg { width: 100px; }
+    #dive-container { top: 70px; font-size: 18px; }
+    #pause-btn { font-size: 16px; padding: 8px 15px; }
+    #boost-container { bottom: 30px; right: 15px; height: 180px; width: 20px; }
+    #boost-icon { font-size: 18px; top: -30px; }
+    #game-over-screen h1 { font-size: 60px; }
+    .menu-btn { font-size: 20px; padding: 12px 30px; min-width: 200px; }
+    .mobile-btn, #mobile-actions { display: flex; }
+    .rule-item { font-size: 14px; }
+    .rule-item span { font-size: 18px; min-width: 40px; }
+}

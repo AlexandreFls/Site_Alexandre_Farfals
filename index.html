@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Boat Run - Alexandre Farfals</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    
+    <script type="importmap">
+        {
+            "imports": {
+                "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+                "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+            }
+        }
+    </script>
+</head>
+<body>
+    <div id="speed-lines"></div>
+    <div id="floating-texts-container"></div>
+
+    <div id="countdown-container" style="display: none;">
+        <div id="countdown-text">3</div>
+    </div>
+
+    <div id="start-screen">
+        <div class="high-score-badge">🏆 RECORD : <span id="high-score-display">0</span></div>
+        <h1 class="game-title">BOAT RUN</h1>
+        <p class="game-slogan">Hissez les voiles. Esquivez. Survivez.</p>
+        
+        <div class="main-menu-btns">
+            <button id="btn-play">JOUER</button>
+            <button id="btn-rules">RÈGLES DU JEU</button>
+        </div>
+
+        <p class="credits">Réalisé par Alexandre Farfals<br>Rendu final - Transformation Digitale</p>
+    </div>
+
+    <div id="rules-modal" class="modal-hidden">
+        <div class="modal-content">
+            <h2>📜 Comment Jouer ?</h2>
+            <div class="rules-grid">
+                <div class="rule-item"><span>⬅️ ➡</span><p>Tourner pour esquiver les obstacles</p></div>
+                <div class="rule-item"><span>⬆️ / Z</span><p>Sauter (Coûte 15% d'Énergie)</p></div>
+                <div class="rule-item"><span>⬇️ / S</span><p>Plonger (Passe SOUS les tonneaux !)</p></div>
+                <div class="rule-item"><span>ESPACE</span><p>Activer le Boost (Vitesse max !)</p></div>
+                <div class="rule-item"><span>🪙</span><p>Surface : Pièces (Combo & Revivre)</p></div>
+                <div class="rule-item"><span>🫧</span><p>Fonds marins : Perles Bleues (+1.5s d'O₂ !)</p></div>
+            </div>
+            <button id="btn-close-rules">J'AI COMPRIS</button>
+        </div>
+    </div>
+
+    <div id="ui-container" style="display: none;">
+        <button id="pause-btn">⏸</button>
+        <div id="dive-container">O₂ <span id="dive-timer">5.0s</span></div>
+        <div id="coin-container">🪙 <span id="coin-count">0</span></div>
+
+        <div id="combo-container">
+            <div id="combo-text" style="display: none;">x1</div>
+            <div id="combo-bar-bg" style="display: none;"><div id="combo-bar-fill"></div></div>
+        </div>
+        
+        <div id="score-container"><div id="score-display">0</div></div>
+
+        <div id="boost-container">
+            <div id="boost-bar"></div>
+            <div id="boost-icon">⚡</div>
+        </div>
+
+        <div id="mobile-ctrl-left" class="mobile-btn">⬅️</div>
+        <div id="mobile-ctrl-right" class="mobile-btn">➡️</div>
+        <div id="mobile-actions">
+            <div id="btn-mobile-jump" class="mobile-action-btn">🚀 SAUT</div>
+            <div id="btn-mobile-dive" class="mobile-action-btn">🌊 PLONGÉE</div>
+            <div id="btn-mobile-boost" class="mobile-action-btn">⚡ BOOST</div>
+        </div>
+    </div>
+
+    <div id="game-over-screen" style="display: none;">
+        <h1 class="shake-text">ÉCHOUÉ !</h1>
+        <p id="final-score">Score: 0</p>
+        <button class="menu-btn" id="btn-replay">Rejouer</button>
+        <button class="menu-btn revive-btn" id="btn-revive" style="display: none;">
+            Revivre (<span id="revive-cost-text">2</span> 🪙)
+        </button>
+        <button class="menu-btn home-btn" id="btn-home">Retour au Port</button>
+    </div>
+
+    <script type="module" src="main.js"></script>
+</body>
+</html>

@@ -1,0 +1,11 @@
+Model Information:
+* title:	Bird Flying Animation
+* source:	https://sketchfab.com/3d-models/bird-flying-animation-61e8ff53d4e845d5b0aeaaf39b5869ef
+* author:	Syed Inzamam Haseen (https://sketchfab.com/megam969)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Bird Flying Animation" (https://sketchfab.com/3d-models/bird-flying-animation-61e8ff53d4e845d5b0aeaaf39b5869ef) by Syed Inzamam Haseen (https://sketchfab.com/megam969) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)

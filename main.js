@@ -77,14 +77,12 @@ scene.add(sun);
 const sandMat = new THREE.MeshStandardMaterial({ color: 0xE6C280, roughness: 1 });
 const rockMat = new THREE.MeshStandardMaterial({ color: 0x555555, roughness: 0.9 });
 const mountainMat = new THREE.MeshStandardMaterial({ color: 0x8B7355, roughness: 1 });
-const cloudMat = new THREE.MeshBasicMaterial({ color: 0xffffff, fog: false });
 const bonusMat = new THREE.MeshStandardMaterial({ color: 0xFFD700, emissive: 0xaa8800, roughness: 0.2, metalness: 1 });
 const mineMat = new THREE.MeshStandardMaterial({ color: 0x111111, metalness: 0.8, roughness: 0.2 });
 const pearlMat = new THREE.MeshStandardMaterial({ color: 0x00ffff, emissive: 0x0088ff, roughness: 0.1, metalness: 0.8 });
 
 const baseEdgeGeo = new THREE.BoxGeometry(1, 1, 1);
 const baseMountainGeo = new THREE.ConeGeometry(1, 1, 5);
-const basePuffGeo = new THREE.DodecahedronGeometry(1);
 const bonusGeo = new THREE.OctahedronGeometry(0.4);
 const mineGeo = new THREE.IcosahedronGeometry(0.5, 0);
 const pearlGeo = new THREE.SphereGeometry(0.3, 16, 16);
@@ -123,12 +121,11 @@ const baseWakeMat = new THREE.MeshBasicMaterial({ map: smoothWakeTexture, color:
 // 6. VARIABLES DU JEU ET HIGH SCORE
 // ==========================================
 const START_SPEED = 0.2;
-const ABSOLUTE_MAX_SPEED = 0.45;
 let currentBaseSpeed = START_SPEED;
 let currentSpeed = currentBaseSpeed;
 
 let gameStarted = false, isPaused = false, isGameOver = false, isCountingDown = false;
-let score = 0, coinsCollected = 0, reviveCost = 2, lastMilestone = 0;
+let score = 0, coinsCollected = 0, reviveCost = 2;
 let comboMultiplier = 1, comboTimer = 0;
 let boostEnergy = 100, boostState = 'READY'; 
 let targetX = 0, jumpVelocity = 0, jumpOffset = 0, currentLerpY = 0.5, cameraShake = 0;
@@ -148,10 +145,13 @@ const itemBox = new THREE.Box3();
 const boat = new THREE.Group();
 scene.add(boat);
 const loader = new GLTFLoader();
+
+// LA LIGNE MAGIQUE POUR LES COULEURS EST ICI 👇
 const colormap = new THREE.TextureLoader().load('assets/Textures/colormap.png', (texture) => {
-    texture.colorSpace = THREE.SRGBColorSpace; // Pour des couleurs riches !
+    texture.colorSpace = THREE.SRGBColorSpace; 
 });
-colormap.flipY = false;
+colormap.flipY = false; 
+
 const boatMat = new THREE.MeshStandardMaterial({ map: colormap, roughness: 0.8, metalness: 0.2 });
 
 loader.load('assets/bateau.glb', (gltf) => {
@@ -258,11 +258,7 @@ function spawnSplashBubble(isTakeoff) {
 
 function spawnUnderwaterEffect() {
     if (!isDiving) return;
-    if (Math.random() > 0.4) {
-        const line = new THREE.Mesh(speedLineGeo, speedLineMat); line.rotation.x = Math.PI / 2; line.position.set((Math.random() - 0.5) * 20, -0.5 + (Math.random() - 0.5) * 2, -30 - Math.random() * 20); line.userData.isLine = true; scene.add(line); underwaterEffects.push(line);
-    } else {
-        const bub = new THREE.Mesh(bubbleGeo, bubbleMat); bub.position.set((Math.random() - 0.5) * 20, -1.5 + Math.random(), -30 - Math.random() * 20); bub.userData.isLine = false; scene.add(bub); underwaterEffects.push(bub);
-    }
+    const bub = new THREE.Mesh(bubbleGeo, bubbleMat); bub.position.set((Math.random() - 0.5) * 20, -1.5 + Math.random(), -30 - Math.random() * 20); scene.add(bub); underwaterEffects.push(bub);
 }
 
 // ==========================================
@@ -297,6 +293,7 @@ document.getElementById('btn-revive').onclick = () => {
 };
 document.getElementById('btn-home').onclick = () => location.reload();
 
+// ÉCOUTEURS TACTILES NOUVELLE INTERFACE
 document.getElementById('mobile-ctrl-left').ontouchstart = (e) => { e.preventDefault(); handleMove(-1); };
 document.getElementById('mobile-ctrl-right').ontouchstart = (e) => { e.preventDefault(); handleMove(1); };
 document.getElementById('btn-mobile-jump').ontouchstart = (e) => { e.preventDefault(); handleJump(); };
@@ -314,10 +311,10 @@ function resetGame() {
     floatingTextsContainer.innerHTML = ''; targetX = 0; boat.position.x = 0; isDiving = false; currentBaseSpeed = START_SPEED;
     obsTimer = 0; decTimer = 0; scenTimer = 0; bonTimer = 0; wakeTimer = 0; mineTimer = 0; pearlTimer = 0;
     
-    score = 0; lastMilestone = 0; coinsCollected = 0; coinCountDisplay.innerText = "0"; reviveCost = 2; comboMultiplier = 1; comboTimer = 0; updateComboUI();
+    score = 0; coinsCollected = 0; coinCountDisplay.innerText = "0"; reviveCost = 2; comboMultiplier = 1; comboTimer = 0; updateComboUI();
     scoreDisplay.innerText = "0"; scoreDisplay.style.color = "white"; boostEnergy = 100; boostState = 'READY'; canDive = true; diveTimeLeft = 5.0; diveCooldown = 0.0;
     
-    for (let i = 0; i < 8; i++) { const zPos = -15 - (i * 15); spawnScenery(zPos); spawnDecoration(zPos); }
+    for (let i = 0; i < 20; i++) { const zPos = -10 - (i * 12); spawnScenery(zPos); spawnDecoration(zPos); spawnDecoration(zPos); }
 }
 
 function animate() {
@@ -422,7 +419,6 @@ function animate() {
     // CAMÉRA RAPPROCHÉE (Suit le plongeon)
     camera.position.y = THREE.MathUtils.lerp(camera.position.y, isDiving ? 1.5 : 4, 0.08);
     camera.position.z = THREE.MathUtils.lerp(camera.position.z, isDiving ? 6 : 8, 0.08);
-    // On force la caméra à regarder devant elle, pour ne pas révéler les bords
     camera.lookAt(0, 1, -5); 
     
     camera.updateProjectionMatrix();
@@ -430,7 +426,7 @@ function animate() {
     if (isDiving) { scene.background.setHex(0x005577); scene.fog.color.setHex(0x005577); scene.fog.near = THREE.MathUtils.lerp(scene.fog.near, 5, 0.1); scene.fog.far = THREE.MathUtils.lerp(scene.fog.far, 60, 0.1); if (Math.random() > 0.8) spawnUnderwaterEffect(); } 
     else { scene.background.setHex(0x6CB4EE); scene.fog.color.setHex(0x6CB4EE); scene.fog.near = THREE.MathUtils.lerp(scene.fog.near, 40, 0.1); scene.fog.far = THREE.MathUtils.lerp(scene.fog.far, 160, 0.1); }
 
-    for (let i = underwaterEffects.length - 1; i >= 0; i--) { const ef = underwaterEffects[i]; ef.position.z += currentSpeed * (ef.userData.isLine ? 4 : 1.2); if (!ef.userData.isLine) ef.position.y += 0.05; if (ef.position.z > camera.position.z + 5) { scene.remove(ef); underwaterEffects.splice(i, 1); } }
+    for (let i = underwaterEffects.length - 1; i >= 0; i--) { const ef = underwaterEffects[i]; ef.position.z += currentSpeed * 1.2; ef.position.y += 0.05; if (ef.position.z > camera.position.z + 5) { scene.remove(ef); underwaterEffects.splice(i, 1); } }
 
     // Spawners
     let spawnRateModifier = boostState === 'ACTIVE' ? 2 : 1;
@@ -453,7 +449,7 @@ function animate() {
     renderer.render(scene, camera);
 }
 
-for (let i = 0; i < 8; i++) { const zPos = -15 - (i * 15); spawnScenery(zPos); spawnDecoration(zPos); }
+for (let i = 0; i < 20; i++) { const zPos = -10 - (i * 12); spawnScenery(zPos); spawnDecoration(zPos); spawnDecoration(zPos); }
 animate();
 
 window.addEventListener('resize', () => { camera.aspect = window.innerWidth / window.innerHeight; camera.updateProjectionMatrix(); renderer.setSize(window.innerWidth, window.innerHeight); });
